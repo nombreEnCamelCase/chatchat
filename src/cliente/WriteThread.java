@@ -40,8 +40,7 @@ public class WriteThread extends Thread {
 
 		  do {
 			  	text = getLineFromUserByInput("");
-			  
-	           if(!text.equals("")&&!text.equals("\n")&&!text.equals("\r")) {
+			  	if(isValidMessage(text)) {
 	        	   System.out.print("[yo]: "+text+"\n");
 	          	   writer.println(text);
 	           }
@@ -72,6 +71,10 @@ public class WriteThread extends Thread {
 		}
 		
 		return resultLine;
+	}
+	
+	private boolean isValidMessage(String message) {
+		return !message.equals("") && !message.equals("\n") && !message.equals("\r");
 	}
 	
 }

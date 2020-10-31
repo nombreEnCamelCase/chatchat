@@ -31,11 +31,11 @@ public class ChatClient {
 
 	}
 
-	void setUserName(String userName) {
+	public void setUserName(String userName) {
 		this.userName = userName;
 	}
 
-	String getUserName() {
+	public String getUserName() {
 		return this.userName;
 	}
 

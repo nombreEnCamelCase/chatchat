@@ -1,16 +1,19 @@
-package servidor_sala;
+package servidor_lobby;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ChatServer {
+import servidor_sala.ChatServer;
+import servidor_lobby.UserThreadLobby;
+
+public class LobbyServer {
 	private int port;
 	// Usamos set para no dejar repetir usuarios.
 	private Set<String> userNames = new HashSet<>();
-	private Set<UserThread> userThreads = new HashSet<>();
+	private Set<UserThreadLobby> usersInLobby = new HashSet<>();
 
-	public ChatServer(int port) {
+	public LobbyServer(int port) {
 		this.port = port;
 	}
 
@@ -23,8 +26,8 @@ public class ChatServer {
 				Socket socket = serverSocket.accept();
 				System.out.println("Nuevo usuario conectado.");
 
-				UserThread newUser = new UserThread(socket, this);
-				userThreads.add(newUser);
+				UserThreadLobby newUser = new UserThreadLobby(socket, this);
+				usersInLobby.add(newUser);
 				newUser.start();
 			}
 
@@ -46,14 +49,15 @@ public class ChatServer {
 		}
 	}
 
-	// Envia mensaje desde un usuario hacia otros.
-	public void broadcast(String message, UserThread excludeUser) {
-		for (UserThread aUser : userThreads) {
-			if (aUser != excludeUser) {
-				aUser.sendMessage(message);
-			}
-		}
-	}
+	/*	EL BROADCAST NO LO NECESITO PORQUE  NO TENGO QUE AVISARLE NADA A LOS OTROS USURAIOS.*/
+//	// Envia mensaje desde un usuario hacia otros.
+//	void broadcast(String message, UserThreadLobby excludeUser) {
+//		for (UserThreadLobby aUser : usersInLobby) {
+//			if (aUser != excludeUser) {
+//				aUser.sendMessage(message);
+//			}
+//		}
+//	}
 
 	// Guardamos el nickname del nuevo usuario conectado.
 	public void addUserName(String userName) {
@@ -61,10 +65,10 @@ public class ChatServer {
 	}
 
 	// Cuando el usuario se desconecta lo revomeos de la lista de nicknames.
-	public void removeUser(String userName, UserThread aUser) {
+	public void removeUser(String userName, UserThreadLobby aUser) {
 		boolean removed = userNames.remove(userName);
 		if (removed) {
-			userThreads.remove(aUser);
+			usersInLobby.remove(aUser);
 			System.out.println("El usuario [" + userName + "] ha salido.");
 		}
 	}
@@ -72,8 +76,6 @@ public class ChatServer {
 	public Set<String> getUserNames() {
 		return this.userNames;
 	}
-	
-	
 	
 	// Retornamos verdadero si existe al menso algun usuario.
 	public boolean hasUsers() {

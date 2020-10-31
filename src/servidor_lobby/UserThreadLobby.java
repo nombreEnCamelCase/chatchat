@@ -1,17 +1,21 @@
-package servidor_sala;
+package servidor_lobby;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
 
-// Este thread maneja la coneccion para cada cliente conectado
-// asi el servidor puede manejar multiples clientes al mismo tiempo.
+import servidor_lobby.LobbyServer;
 
-public class UserThread extends Thread {
+public class UserThreadLobby extends Thread {
 	private Socket socket;
-	private ChatServer server;
+	private LobbyServer server;
 	private PrintWriter writer;
 
-	public UserThread(Socket socket, ChatServer server) {
+	public UserThreadLobby(Socket socket, LobbyServer server) {
 		this.socket = socket;
 		this.server = server;
 	}
@@ -30,7 +34,7 @@ public class UserThread extends Thread {
 			server.addUserName(userName);
 
 			String serverMessage = "El usuario [ " + userName + " ] ha ingresado a la sala de chat.";
-			server.broadcast(serverMessage, this);
+			//server.broadcast(serverMessage, this);
 
 			String clientMessage;
 
@@ -39,7 +43,7 @@ public class UserThread extends Thread {
 
 				if (isValidMessage(clientMessage)) {
 					serverMessage = "[" + userName + "]: " + clientMessage;
-					server.broadcast(serverMessage, this);
+					//server.broadcast(serverMessage, this);
 				}
 
 			} while (!clientMessage.equals("-quit"));
@@ -47,8 +51,8 @@ public class UserThread extends Thread {
 			server.removeUser(userName, this);
 			socket.close();
 
-			serverMessage = userName + " ha salido del chat.";
-			server.broadcast(serverMessage, this);
+			serverMessage = userName + " se ha desconectado.";
+			//server.broadcast(serverMessage, this);
 
 		} catch (IOException ex) {
 			System.out.println("Error en el  UserThread: " + ex.getMessage());
