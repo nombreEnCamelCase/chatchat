@@ -53,9 +53,7 @@ public class UserThread extends Thread {
 						// Metodo magico tipo swtich
 						System.out.println("Se intento tirar un comando de sala.");
 					}
-
 				}
-
 			} while (!isCommandActionQuit(clientMessage));
 			
 			

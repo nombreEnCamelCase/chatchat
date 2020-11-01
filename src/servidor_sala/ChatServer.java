@@ -9,15 +9,18 @@ public class ChatServer {
 	// Usamos set para no dejar repetir usuarios.
 	private Set<String> userNames = new HashSet<>();
 	private Set<UserThread> userThreads = new HashSet<>();
+	private String nombreSala;
 	
-	public ChatServer(int port) {
+	public ChatServer(int port,String nombre) {
 		this.port = port;
+		this.nombreSala = nombre;
 	}
 
 	public void execute() {
 		try (ServerSocket serverSocket = new ServerSocket(port)) {
 
-			System.out.println("Servidor escuchando puerto: " + port);
+			this.port = serverSocket.getLocalPort();
+			System.out.println("Servidor de SALA escuchando puerto: " + port);
 
 			while (true) {
 				Socket socket = serverSocket.accept();
@@ -31,18 +34,6 @@ public class ChatServer {
 		} catch (IOException ex) {
 			//System.out.println("Error en el servidor: " + ex.getMessage());
 			//ex.printStackTrace();
-		}
-	}
-
-	public static void main(String[] args) {
-
-		int port = 20000;
-
-		try {
-			ChatServer server = new ChatServer(port);
-			server.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 
@@ -86,5 +77,17 @@ public class ChatServer {
 	// Retornamos verdadero si existe al menso algun usuario.
 	public boolean hasUsers() {
 		return !this.userNames.isEmpty();
+	}
+	
+	public String getNombreSala() {
+		return this.nombreSala;
+	}
+	
+	public Integer getPort() {
+		return this.port;
+	}
+	
+	public Integer getConnectedUsers() {
+		return this.userNames.size();
 	}
 }

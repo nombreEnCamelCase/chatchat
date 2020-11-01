@@ -12,12 +12,14 @@ public class WriteThread extends Thread {
 	private Socket socket;
 	private ChatClient client;
 	private Scanner localScan;
+	private boolean inLobby;
 
 	public WriteThread(Socket socket, ChatClient client) {
 		this.socket = socket;
 		this.client = client;
 		this.localScan = new Scanner(System.in);
-
+		this.inLobby = (client.getPort() == 20000);
+		
 		try {
 			OutputStream output = socket.getOutputStream();
 			writer = new PrintWriter(output, true);
@@ -34,15 +36,28 @@ public class WriteThread extends Thread {
 		client.setUserName(userName);
 		writer.println(userName);
 
-		System.out.println("Ha entrado al chat, puede comenzar a hablar.");
+		if (this.inLobby) {
+			System.out.println("Usted se encuentra en el lobby.\n");
+	
+			System.out.println("COMANDOS DE LOBBY:");
+			System.out.println("================");
+			System.out.println("-create NOMBRE_SALA  (Crea nueva sala e ingresar)");
+			System.out.println("-goto NOMBRE_SALA (Va a una sala existente)");
+			System.out.println("-chatrooms (Muestra salas publicas activas y sus conectados)");
+			System.out.println("-quit  (Salir)");
+			System.out.println("================\n");
+		} else
+			System.out.println("Usted ha ingresado a la sala, puede comenzar a hablar.");
 
 		String text, msje;
-		
+
 		do {
 			text = getLineFromUserByInput("");
 			if (isValidMessage(text)) {
-				msje = "[yo]: " + text;
-				System.out.println(msje);
+				if (!this.inLobby) {
+					msje = "[yo]: " + text;
+					System.out.println(msje);
+				}
 				writer.println(text);
 			}
 

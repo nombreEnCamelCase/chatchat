@@ -11,10 +11,9 @@ import java.io.*;
 // Escribir '-quit' para cerrar atencion de cliente.
 public class ChatClient {
 	private String hostname;
-	private int port = 20000;
+	private int port;
 	private String userName;
 
-	
 	public ChatClient(String hostname, int port) {
 		this.hostname = hostname;
 		this.port = port;
@@ -23,8 +22,10 @@ public class ChatClient {
 	public void execute() {
 		try {
 			Socket socket = new Socket(hostname, port);
-
-			System.out.println("Se ha conectado a la sala de chat.");
+			if (port == 20000)
+				System.out.println("Se ha conectado al lobby.");
+			else
+				System.out.println("Se ha conectado a la sala de chat.");
 
 			(new ReadThread(socket, this)).start();
 			(new WriteThread(socket, this)).start();
@@ -45,16 +46,7 @@ public class ChatClient {
 		return this.userName;
 	}
 
-	public static void main(String[] args) {
-		String hostname = "localhost";
-		int port = 20000;
-
-		try {
-			ChatClient client = new ChatClient(hostname, port);
-			// client.setUserName(userName);
-			client.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public Integer getPort() {
+		return this.port;
 	}
 }

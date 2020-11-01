@@ -11,10 +11,11 @@ public class ReadThread extends Thread {
 	private BufferedReader reader;
 	private Socket socket;
 	private ChatClient client;
-
+	private boolean inLobby;
 	public ReadThread(Socket socket, ChatClient client) {
 		this.socket = socket;
 		this.client = client;
+		this.inLobby = (client.getPort() == 20000);
 
 		try {
 			InputStream input = socket.getInputStream();
