@@ -136,10 +136,7 @@ public class UserThread extends Thread {
 
 			String messageFinal = "[" + userName + "]: " + message.substring(message.indexOf(")")+1);
 
-			//System.out.println("message" + message + usuario + messageFinal);
-			
 			server.privateBroadcast(messageFinal,usuario);
-			
 		}
 		
 		//if(message.equals("-download")) {
