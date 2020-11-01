@@ -34,18 +34,6 @@ public class ChatServer {
 		}
 	}
 
-	public static void main(String[] args) {
-
-		int port = 20000;
-
-		try {
-			ChatServer server = new ChatServer(port);
-			server.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	// Envia mensaje desde un usuario hacia otros.
 	public void broadcast(String message, UserThread excludeUser) {
 		

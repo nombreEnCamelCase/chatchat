@@ -45,16 +45,4 @@ public class ChatClient {
 		return this.userName;
 	}
 
-	public static void main(String[] args) {
-		String hostname = "localhost";
-		int port = 20000;
-
-		try {
-			ChatClient client = new ChatClient(hostname, port);
-			// client.setUserName(userName);
-			client.execute();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }
