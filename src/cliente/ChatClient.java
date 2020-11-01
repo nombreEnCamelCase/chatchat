@@ -1,6 +1,11 @@
 package cliente;
 
 import java.net.*;
+import java.util.LinkedList;
+import java.util.List;
+
+import servidor_sala.Mensaje;
+
 import java.io.*;
 
 // Escribir '-quit' para cerrar atencion de cliente.
@@ -9,6 +14,7 @@ public class ChatClient {
 	private int port = 20000;
 	private String userName;
 
+	
 	public ChatClient(String hostname, int port) {
 		this.hostname = hostname;
 		this.port = port;
@@ -51,5 +57,4 @@ public class ChatClient {
 			e.printStackTrace();
 		}
 	}
-
 }

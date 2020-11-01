@@ -29,14 +29,11 @@ public class ReadThread extends Thread {
 		while (true) {
 			try {
 				String response = reader.readLine();
-				System.out.println("\n" + response);
-
-//				if (client.getUserName() != null) {
-//					System.out.print("[" + client.getUserName() + "]: asd");
-//				}
+				System.out.println(response);
+				
 			} catch (IOException ex) {
-				System.out.println("Error al leer desde el server: " + ex.getMessage());
-				ex.printStackTrace();
+				//System.out.println("Error al leer desde el server: " + ex.getMessage());
+				//ex.printStackTrace();
 				break;
 			}
 		}

@@ -2,6 +2,8 @@ package servidor_sala;
 
 import java.io.*;
 import java.net.*;
+import java.util.LinkedList;
+import java.util.List;
 
 // Este thread maneja la coneccion para cada cliente conectado
 // asi el servidor puede manejar multiples clientes al mismo tiempo.
@@ -10,7 +12,9 @@ public class UserThread extends Thread {
 	private Socket socket;
 	private ChatServer server;
 	private PrintWriter writer;
-
+	private String userName;
+	private List<Mensaje> mensajes = new LinkedList<Mensaje>();
+	
 	public UserThread(Socket socket, ChatServer server) {
 		this.socket = socket;
 		this.server = server;
@@ -26,7 +30,7 @@ public class UserThread extends Thread {
 
 			printUsers();
 
-			String userName = reader.readLine();
+			userName = reader.readLine();
 			server.addUserName(userName);
 
 			String serverMessage = "El usuario [ " + userName + " ] ha ingresado a la sala de chat.";
@@ -36,13 +40,25 @@ public class UserThread extends Thread {
 
 			do {
 				clientMessage = reader.readLine();
-
+				
 				if (isValidMessage(clientMessage)) {
-					serverMessage = "[" + userName + "]: " + clientMessage;
-					server.broadcast(serverMessage, this);
+					
+					if(!isCommandAction(clientMessage))
+					{
+						serverMessage = "[" + userName + "]: " + clientMessage;
+						server.broadcast(serverMessage, this);
+					}
+					else {
+						// Metodo para manejar responsabilidades.
+						// Metodo magico tipo swtich
+						System.out.println("Se intento tirar un comando de sala.");
+					}
+
 				}
 
-			} while (!clientMessage.equals("-quit"));
+			} while (!isCommandActionQuit(clientMessage));
+			
+			
 
 			server.removeUser(userName, this);
 			socket.close();
@@ -73,4 +89,48 @@ public class UserThread extends Thread {
 	private boolean isValidMessage(String message) {
 		return !message.equals("") && !message.equals("\n") && !message.equals("\r");
 	}
+	
+	
+	/*
+	 * El siguiente metodo sirve para analizar si es un commando de accion el que mando el usuario y no un mensaje.
+	 * 
+	 * 	= Comandos posibles dentro de una sala:
+		=> -quit   // Desconexion de sala, vuelve al lobby.
+	 	=> -wh(NOMBRE_USUARIO) MENSAJE // Comando para enviar un whisper.
+	 	=> -download // Comando para descargar el array de mensajes persistidos del cliente
+	 * 
+	 * */
+	private boolean isCommandAction(String message) {
+		// Debo verificar que no sea un commando de accion del usuario.
+		// Chain of responsability.
+		if(message.equals("-quit")) {
+			System.out.println("QUIERE SALIR");
+			return true;
+		}
+		
+		if(message.startsWith("-wh(")) {
+			System.out.println("QUIERE WHISPEAR");
+			return true;
+		}
+		
+		
+		if(message.startsWith("-download")) {
+			System.out.println("QUIERE DESCARGAR HISTORIAL");
+			return true;
+		}
+		
+		return false;
+	}
+	
+	
+	
+	private boolean isCommandActionQuit(String message) {
+		return message.equals("-quit");
+	}
+	
+//	public void addMessage(String msje, String receptPriv) {
+//		this.mensajes.add(new Mensaje(msje,receptPriv));
+//	}
+
+	
 }

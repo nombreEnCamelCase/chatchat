@@ -9,7 +9,7 @@ public class ChatServer {
 	// Usamos set para no dejar repetir usuarios.
 	private Set<String> userNames = new HashSet<>();
 	private Set<UserThread> userThreads = new HashSet<>();
-
+	
 	public ChatServer(int port) {
 		this.port = port;
 	}
@@ -29,8 +29,8 @@ public class ChatServer {
 			}
 
 		} catch (IOException ex) {
-			System.out.println("Error en el servidor: " + ex.getMessage());
-			ex.printStackTrace();
+			//System.out.println("Error en el servidor: " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 	}
 
@@ -48,8 +48,18 @@ public class ChatServer {
 
 	// Envia mensaje desde un usuario hacia otros.
 	public void broadcast(String message, UserThread excludeUser) {
+		
 		for (UserThread aUser : userThreads) {
 			if (aUser != excludeUser) {
+				aUser.sendMessage(message);
+			}
+		}
+	}
+	
+	// Envia mensaje desde un usuario hacia otro privado.
+	public void privateBroadcast(String message, String privateReceptor) {
+		for (UserThread aUser : userThreads) {
+			if (aUser.getName().equals(privateReceptor)) {
 				aUser.sendMessage(message);
 			}
 		}
@@ -72,8 +82,6 @@ public class ChatServer {
 	public Set<String> getUserNames() {
 		return this.userNames;
 	}
-	
-	
 	
 	// Retornamos verdadero si existe al menso algun usuario.
 	public boolean hasUsers() {
