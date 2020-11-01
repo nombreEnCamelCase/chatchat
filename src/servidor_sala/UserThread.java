@@ -51,6 +51,7 @@ public class UserThread extends Thread {
 					else {
 						// Metodo para manejar responsabilidades.
 						// Metodo magico tipo swtich
+						attendAction(clientMessage);
 						System.out.println("Se intento tirar un comando de sala.");
 					}
 
@@ -126,6 +127,29 @@ public class UserThread extends Thread {
 	
 	private boolean isCommandActionQuit(String message) {
 		return message.equals("-quit");
+	}
+	
+	private void attendAction( String message ){
+		if(message.startsWith("-wh(")) {
+			//-wh(			user1			)			hacete el loco por aca
+
+			String usuario = message.substring(message.indexOf("(")+1,message.indexOf(")"));
+
+			String messageFinal = message.substring(message.indexOf(")")+1,message.indexOf("\n"));
+
+			System.out.println("message" + message + usuario + messageFinal);
+			
+			server.privateBroadcast(messageFinal,usuario);
+			
+		}
+		
+		//if(message.equals("-download")) {
+			//accion descargar 
+		//}
+	}
+
+	public String getUserName() {
+		return userName;
 	}
 	
 //	public void addMessage(String msje, String receptPriv) {

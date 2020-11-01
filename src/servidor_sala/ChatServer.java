@@ -59,7 +59,7 @@ public class ChatServer {
 	// Envia mensaje desde un usuario hacia otro privado.
 	public void privateBroadcast(String message, String privateReceptor) {
 		for (UserThread aUser : userThreads) {
-			if (aUser.getName().equals(privateReceptor)) {
+			if (aUser.getUserName().equals(privateReceptor)) {
 				aUser.sendMessage(message);
 			}
 		}
