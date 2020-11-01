@@ -129,16 +129,12 @@ public class UserThread extends Thread {
 	
 	private void attendAction( String message ){
 		if(message.startsWith("-wh(")) {
-			//-wh(			user1			)			hacete el loco por aca
 
 			String usuario = message.substring(message.indexOf("(")+1,message.indexOf(")"));
 
-			String messageFinal = message.substring(message.indexOf(")")+1,message.indexOf("\n"));
+			String messageFinal = "[" + userName + "]: " + message.substring(message.indexOf(")")+1);
 
-			System.out.println("message" + message + usuario + messageFinal);
-			
 			server.privateBroadcast(messageFinal,usuario);
-			
 		}
 		
 	}
