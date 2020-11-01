@@ -49,8 +49,6 @@ public class UserThread extends Thread {
 						server.broadcast(serverMessage, this);
 					}
 					else {
-						// Metodo para manejar responsabilidades.
-						// Metodo magico tipo swtich
 						attendAction(clientMessage);
 						System.out.println("Se intento tirar un comando de sala.");
 					}
@@ -143,18 +141,11 @@ public class UserThread extends Thread {
 			
 		}
 		
-		//if(message.equals("-download")) {
-			//accion descargar 
-		//}
 	}
 
 	public String getUserName() {
 		return userName;
 	}
 	
-//	public void addMessage(String msje, String receptPriv) {
-//		this.mensajes.add(new Mensaje(msje,receptPriv));
-//	}
-
 	
 }
